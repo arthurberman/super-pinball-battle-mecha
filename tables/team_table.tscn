@@ -1,0 +1,227 @@
+[gd_scene load_steps=14 format=3 uid="uid://dlfnadrtvlul8"]
+
+[ext_resource type="Script" uid="uid://bkkh7vw7oodqh" path="res://tables/destroy_zone.gd" id="1_bbmw3"]
+[ext_resource type="Script" uid="uid://dxg4ufrx2gk0m" path="res://tables/flipper.gd" id="2_e1kdr"]
+[ext_resource type="PackedScene" uid="uid://b2xpilyb3pvyu" path="res://ball.tscn" id="3_2r7ie"]
+[ext_resource type="Script" uid="uid://b62rannnx7jnl" path="res://tables/spawner.gd" id="4_0itwy"]
+[ext_resource type="Material" uid="uid://cvqb38aqtcd51" path="res://tables/Scenery_Shader.tres" id="4_2e7xc"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_4qb4o"]
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_e1kdr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bbmw3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1kdr"]
+albedo_color = Color(0.458824, 0.00784314, 0.00392157, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e1kdr"]
+material = SubResource("StandardMaterial3D_e1kdr")
+size = Vector3(3.54, 1, 1)
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_bbmw3"]
+points = PackedVector3Array(-1.70346, -0.5, -0.5, 1.66496, 0.5, 0.5, 1.66496, 0.5, -0.488571, 1.70346, -0.5, -0.5, 1.66496, -0.488571, 0.5, -1.66496, 0.5, 0.5, -1.66496, 0.5, -0.488571, -1.66496, -0.488571, 0.5)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bbmw3"]
+material = ExtResource("4_2e7xc")
+size = Vector2(40, 60)
+
+[sub_resource type="Environment" id="Environment_2e7xc"]
+glow_enabled = true
+glow_bloom = 0.28
+
+[node name="TeamTable" type="Node3D"]
+
+[node name="Table" type="AnimatableBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.957536, -0.288313, 0, 0.288313, 0.957536, 0, -0.66849, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table"]
+shape = SubResource("WorldBoundaryShape3D_4qb4o")
+
+[node name="DestroyZone" type="Area3D" parent="Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.46268, 2.81607)
+collision_layer = 0
+script = ExtResource("1_bbmw3")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/DestroyZone"]
+transform = Transform3D(1, 0, 0, 0, 0.130249, 0.991481, 0, -0.991481, 0.130249, 0, -0.280925, 2.13845)
+shape = SubResource("WorldBoundaryShape3D_e1kdr")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Table"]
+transform = Transform3D(1, 0, 0, 0, 0.539756, 0.841822, 0, -0.841822, 0.539756, 0, 8.23541, 10.5717)
+
+[node name="Flipper" type="Node3D" parent="Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9449, 0.553003, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Table/Flipper"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/Flipper/StaticBody3D"]
+shape = SubResource("BoxShape3D_bbmw3")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="Table/Flipper"]
+mass = 2.0
+gravity_scale = 7.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(2.5, 0, 0)
+can_sleep = false
+continuous_cd = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Table/Flipper/RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55831, 0, 0)
+mesh = SubResource("BoxMesh_e1kdr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/Flipper/RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55831, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_bbmw3")
+
+[node name="HingeJoint3D" type="HingeJoint3D" parent="Table/Flipper"]
+transform = Transform3D(0.720866, -0.693075, 0, -3.02953e-08, -3.151e-08, 1, -0.693075, -0.720866, -4.37114e-08, -0.398565, -2.25728e-07, 0.0772533)
+node_a = NodePath("../RigidBody3D")
+node_b = NodePath("../StaticBody3D")
+angular_limit/enable = true
+angular_limit/upper = 0.523599
+angular_limit/lower = -0.523599
+motor/enable = true
+motor/target_velocity = -17.4533
+motor/max_impulse = 1024.0
+script = ExtResource("2_e1kdr")
+action = "flip_right"
+
+[node name="Flipper2" type="Node3D" parent="Table"]
+transform = Transform3D(-1, 0, 8.74228e-08, -7.64274e-15, -1, -8.74228e-08, 8.74228e-08, -8.74228e-08, 1, -4.43219, 0.553003, 0.0329459)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Table/Flipper2"]
+collision_layer = 0
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/Flipper2/StaticBody3D"]
+shape = SubResource("BoxShape3D_bbmw3")
+
+[node name="RigidBody3D" type="RigidBody3D" parent="Table/Flipper2"]
+mass = 2.0
+gravity_scale = 7.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(2.5, 0, 0)
+can_sleep = false
+continuous_cd = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Table/Flipper2/RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.74061, 0, 0)
+mesh = SubResource("BoxMesh_e1kdr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/Flipper2/RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55831, 0, 0)
+shape = SubResource("ConvexPolygonShape3D_bbmw3")
+
+[node name="HingeJoint3D" type="HingeJoint3D" parent="Table/Flipper2"]
+transform = Transform3D(0.720866, -0.693075, 0, -3.02953e-08, -3.151e-08, 1, -0.693075, -0.720866, -4.37114e-08, -0.398565, -2.25728e-07, 0.0772533)
+node_a = NodePath("../RigidBody3D")
+node_b = NodePath("../StaticBody3D")
+angular_limit/enable = true
+angular_limit/upper = 0.523599
+angular_limit/lower = -0.523599
+motor/enable = true
+motor/target_velocity = -17.4533
+motor/max_impulse = 1024.0
+script = ExtResource("2_e1kdr")
+
+[node name="Floor" type="MeshInstance3D" parent="Table"]
+mesh = SubResource("PlaneMesh_bbmw3")
+
+[node name="Ball" parent="Table" instance=ExtResource("3_2r7ie")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.58302, 1.8285, -9.34177)
+center_of_mass_mode = 1
+
+[node name="TablePrototype" type="CSGCombiner3D" parent="Table"]
+material_override = ExtResource("4_2e7xc")
+use_collision = true
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Table/TablePrototype"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 5.77467, 8.93954)
+polygon = PackedVector2Array(-13.4868, -5.83244, -16.4293, 9.86682, -16.1989, 51.5524, 17.235, 50.3148, 18.2493, 10.5358, 17.6628, -6.07437)
+depth = 6.31
+smooth_faces = true
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Table/TablePrototype/CSGPolygon3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.96046e-08, 0.00794005)
+operation = 2
+polygon = PackedVector2Array(7.07222, 39.3845, -5.37096, 39.4804, -7.64834, 26.6181, -11.0343, 19.725, -8.04036, 13.3436, -11.9405, 9.48908, -6.4609, -2.80809, 1.92971, -6.29679, 10.7445, -4.38313, 13.3111, 3.5135, 7.7642, 16.506, 17.3282, 21.6463, 15.3923, 34.7287)
+depth = 8.2
+
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Table/TablePrototype/CSGPolygon3D/CSGPolygon3D"]
+transform = Transform3D(1, 0, 0, 0, 1.19209e-07, -1, 0, 1, 1.19209e-07, -6.84751, 9.22626, -3.3926)
+operation = 2
+radius = 2.29834
+height = 20.655
+
+[node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Table/TablePrototype/CSGPolygon3D/CSGPolygon3D"]
+transform = Transform3D(1, 0, 0, 0, 1.19209e-07, -1, 0, 1, 1.19209e-07, 7.46017, 9.22626, -3.3926)
+operation = 2
+radius = 2.3335
+height = 20.655
+
+[node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Table/TablePrototype/CSGPolygon3D/CSGPolygon3D"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, -1, 0, 1, -2.98023e-08, 0, 25.4452, -1.44361)
+radius = 14.4956
+height = 4.88721
+sides = 64
+
+[node name="CSGPolygon3D" type="CSGPolygon3D" parent="Table/TablePrototype/CSGPolygon3D/CSGPolygon3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.795605, 23.8037, -4.34812)
+operation = 2
+polygon = PackedVector2Array(1.11519, 3.57988, -0.281459, -1.17651, -1.46968, 2.61769, -3.53092, 4.84898, -0.905865, 7.92639, 0.673819, 9.88174, 2.3504, 9.93743, 0.631819, 7.35446)
+depth = 5.0
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="Table/TablePrototype/CSGPolygon3D/CSGPolygon3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.661, 28.1626, -4.68192)
+operation = 2
+polygon = PackedVector2Array(1.11519, 3.57988, -0.281459, -1.17651, -5.15129, 1.06682, -3.96331, 10.8439, 0.53362, 9.11899, 0.673819, 9.88174, 4.02859, 12.7849, 4.63276, 7.35318)
+depth = 5.0
+
+[node name="Bowl" type="CSGPolygon3D" parent="Table/TablePrototype/CSGPolygon3D/CSGPolygon3D"]
+transform = Transform3D(0.86728, -0.0285727, -0.497, -0.49741, -0.0902866, -0.862804, -0.0202197, 0.995506, -0.092516, 3.15236, 40.0599, 0.0338879)
+polygon = PackedVector2Array(3.49468, -3.4918, 2.95849, -5.83009, 5.29724, -5.56896, 5.4863, -4.51163, 5.60861, -3.93693, 6.2762, -3.08251, 7.30064, -2.50791, 9.15511, -1.9264, 9.51692, -1.65171, 9.79692, -1.04497, 7.50769, 0.204292, 5.87721, -0.676151)
+mode = 1
+spin_degrees = 236.9
+spin_sides = 14
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Table/TablePrototype/CSGPolygon3D/CSGPolygon3D"]
+transform = Transform3D(0.271133, -0.50042, 0.822233, 0.557039, 0.778226, 0.289952, -0.784981, 0.3794, 0.489756, -10.7642, 24.9182, -3.12725)
+size = Vector3(3.42554, 8.26746, 3.47162)
+
+[node name="Canyon" type="CSGPolygon3D" parent="Table/TablePrototype/CSGPolygon3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.6197, 15.9601, 0.176647)
+operation = 2
+polygon = PackedVector2Array(-1.40018, -3.95101, -1.26666, -1.36215, 1.517, -0.871103, 2.51957, 0.245991, 2.60905, 1.55605, 2.50631, 2.14637, 1.89655, 2.77881, 3.35041, 3.21265, 5.76896, 3.44779, 5.59114, 2.31327, 5.49307, 0.440958, 2.99474, -2.08026, 1.47841, -2.63144, 0.0618505, -3.51813)
+depth = 11.87
+
+[node name="CSGSphere3D" type="CSGSphere3D" parent="Table/TablePrototype/CSGPolygon3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.577609, -6.23594, 29.0933, -3.80021)
+operation = 2
+radius = 3.98994
+radial_segments = 100
+rings = 66
+
+[node name="Spawner" type="Node3D" parent="Table"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.67582, 5.35037, -38.7502)
+script = ExtResource("4_0itwy")
+scene = Array[PackedScene]([ExtResource("3_2r7ie")])
+nudge = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.760894, 0.648877, 0, -0.648877, 0.760894, 0, 18.5515, 8.25459)
+
+[node name="SpotLight3D" type="SpotLight3D" parent="Camera3D"]
+spot_range = 4096.71
+spot_attenuation = -0.21
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Camera3D"]
+transform = Transform3D(0.879672, 0.380994, 0.28464, -0.461104, 0.536718, 0.706624, 0.116448, -0.752846, 0.647814, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Camera3D"]
+environment = SubResource("Environment_2e7xc")
+
+[connection signal="destroyed" from="Table/DestroyZone" to="Table/Spawner" method="spawn"]
