@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://b2xpilyb3pvyu"]
+[gd_scene load_steps=11 format=3 uid="uid://b2xpilyb3pvyu"]
 
 [ext_resource type="PhysicsMaterial" uid="uid://bk2ujie3o842j" path="res://Ball.tres" id="1_x8fbi"]
+[ext_resource type="Script" uid="uid://d2v6a7qfqqol5" path="res://ball.gd" id="2_41u45"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4qb4o"]
 
@@ -29,6 +30,9 @@ albedo_texture = SubResource("NoiseTexture2D_ktgx5")
 metallic = 0.42
 metallic_specular = 0.69
 roughness = 0.0
+emission_enabled = true
+emission = Color(0.984314, 1, 1, 1)
+emission_energy_multiplier = 16.0
 normal_enabled = true
 normal_texture = SubResource("NoiseTexture2D_0itwy")
 rim_tint = 0.75
@@ -37,6 +41,8 @@ rim_tint = 0.75
 material = SubResource("StandardMaterial3D_2e7xc")
 
 [node name="Ball" type="RigidBody3D"]
+collision_layer = 129
+mass = 0.3
 physics_material_override = ExtResource("1_x8fbi")
 gravity_scale = 7.0
 can_sleep = false
@@ -44,6 +50,7 @@ freeze_mode = 1
 continuous_cd = true
 contact_monitor = true
 max_contacts_reported = 2
+script = ExtResource("2_41u45")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_4qb4o")
@@ -52,7 +59,9 @@ shape = SubResource("SphereShape3D_4qb4o")
 mesh = SubResource("SphereMesh_bbmw3")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-light_color = Color(0, 1, 0.211765, 1)
+light_color = Color(0.724247, 0.855035, 0.900537, 1)
 light_size = 0.677
+light_negative = true
 shadow_enabled = true
-omni_range = 0.577
+omni_attenuation = 0.798
+omni_shadow_mode = 0

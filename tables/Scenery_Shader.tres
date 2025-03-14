@@ -1,4 +1,13 @@
-[gd_resource type="StandardMaterial3D" load_steps=3 format=3 uid="uid://cvqb38aqtcd51"]
+[gd_resource type="StandardMaterial3D" load_steps=5 format=3 uid="uid://cvqb38aqtcd51"]
+
+[sub_resource type="Gradient" id="Gradient_vu4f6"]
+interpolation_color_space = 1
+colors = PackedColorArray(0.371082, 0.413889, 1, 1, 1, 0.00784314, 0.0588235, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_a3shx"]
+gradient = SubResource("Gradient_vu4f6")
+fill_from = Vector2(1, 0.526316)
+fill_to = Vector2(0.189474, 0.494737)
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_vu4f6"]
 domain_warp_enabled = true
@@ -9,6 +18,9 @@ noise = SubResource("FastNoiseLite_vu4f6")
 
 [resource]
 albedo_color = Color(0.427493, 0.427493, 0.427493, 1)
+albedo_texture = SubResource("GradientTexture2D_a3shx")
+metallic = 1.0
+metallic_texture = SubResource("GradientTexture2D_a3shx")
 roughness = 0.4
 normal_enabled = true
 normal_texture = SubResource("NoiseTexture2D_vu4f6")
