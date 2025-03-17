@@ -1,9 +1,12 @@
-[gd_scene load_steps=11 format=3 uid="uid://b2xpilyb3pvyu"]
+[gd_scene load_steps=12 format=3 uid="uid://b2xpilyb3pvyu"]
 
 [ext_resource type="PhysicsMaterial" uid="uid://bk2ujie3o842j" path="res://Ball.tres" id="1_x8fbi"]
 [ext_resource type="Script" uid="uid://d2v6a7qfqqol5" path="res://ball.gd" id="2_41u45"]
+[ext_resource type="AudioStream" uid="uid://bnp3cm6cg5kau" path="res://ball_sounds.tres" id="3_ktgx5"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_4qb4o"]
+margin = 0.01
+radius = 0.6
 
 [sub_resource type="Gradient" id="Gradient_x8fbi"]
 colors = PackedColorArray(0, 0, 0, 0, 1, 1, 1, 1)
@@ -39,12 +42,14 @@ rim_tint = 0.75
 
 [sub_resource type="SphereMesh" id="SphereMesh_bbmw3"]
 material = SubResource("StandardMaterial3D_2e7xc")
+radius = 0.6
+height = 1.2
 
 [node name="Ball" type="RigidBody3D"]
 collision_layer = 129
-mass = 0.3
+mass = 0.1
 physics_material_override = ExtResource("1_x8fbi")
-gravity_scale = 7.0
+gravity_scale = 5.0
 can_sleep = false
 freeze_mode = 1
 continuous_cd = true
@@ -65,3 +70,6 @@ light_negative = true
 shadow_enabled = true
 omni_attenuation = 0.798
 omni_shadow_mode = 0
+
+[node name="Audio" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_ktgx5")

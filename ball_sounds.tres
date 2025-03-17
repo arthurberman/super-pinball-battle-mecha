@@ -1,0 +1,9 @@
+[gd_resource type="AudioStreamRandomizer" load_steps=3 format=3 uid="uid://bnp3cm6cg5kau"]
+
+[ext_resource type="AudioStream" uid="uid://dtjav70k6mxlj" path="res://sounds/hits/thump-020.wav" id="1_sao11"]
+[ext_resource type="AudioStream" uid="uid://c8jmnl5q8h8o1" path="res://sounds/hits/thump-018.wav" id="2_ams6c"]
+
+[resource]
+streams_count = 2
+stream_0/stream = ExtResource("1_sao11")
+stream_1/stream = ExtResource("2_ams6c")

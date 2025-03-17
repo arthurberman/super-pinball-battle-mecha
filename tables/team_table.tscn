@@ -1,27 +1,15 @@
-[gd_scene load_steps=18 format=3 uid="uid://dlfnadrtvlul8"]
+[gd_scene load_steps=23 format=3 uid="uid://dlfnadrtvlul8"]
 
 [ext_resource type="Script" uid="uid://bkkh7vw7oodqh" path="res://tables/destroy_zone.gd" id="1_bbmw3"]
 [ext_resource type="Script" uid="uid://dxg4ufrx2gk0m" path="res://tables/flipper.gd" id="2_e1kdr"]
 [ext_resource type="PackedScene" uid="uid://b2xpilyb3pvyu" path="res://ball.tscn" id="3_2r7ie"]
 [ext_resource type="Script" uid="uid://b62rannnx7jnl" path="res://tables/spawner.gd" id="4_0itwy"]
 [ext_resource type="Material" uid="uid://cvqb38aqtcd51" path="res://tables/Scenery_Shader.tres" id="4_2e7xc"]
+[ext_resource type="AudioStream" uid="uid://cl6cd31rfpdyx" path="res://sounds/flips/flip-008.wav" id="4_mqwyx"]
+[ext_resource type="AudioStream" uid="uid://dc6iipcrm0yhl" path="res://sounds/flips/flip-010.wav" id="5_dyg4x"]
 [ext_resource type="Script" uid="uid://ugle8uj48cxi" path="res://tables/slow_down.gd" id="5_hmcut"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_4qb4o"]
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_e1kdr"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_bbmw3"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1kdr"]
-albedo_color = Color(0.458824, 0.00784314, 0.00392157, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_e1kdr"]
-material = SubResource("StandardMaterial3D_e1kdr")
-size = Vector3(3.54, 1, 1)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_hmcut"]
-size = Vector3(3.53418, 1, 2.17773)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_bbmw3"]
 material = ExtResource("4_2e7xc")
@@ -29,8 +17,40 @@ size = Vector2(40, 60)
 subdivide_width = 4
 subdivide_depth = 4
 
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_e1kdr"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bbmw3"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_hmcut"]
+bounce = 0.39
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e1kdr"]
+albedo_color = Color(0.458824, 0.00784314, 0.00392157, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_e1kdr"]
+material = SubResource("StandardMaterial3D_e1kdr")
+size = Vector3(3.54, 1.925, 1.45)
+subdivide_width = 2
+subdivide_height = 2
+subdivide_depth = 2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hmcut"]
+size = Vector3(1.945, 3.6, 1.97184)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_vs50b"]
+streams_count = 2
+stream_0/stream = ExtResource("4_mqwyx")
+stream_1/stream = ExtResource("5_dyg4x")
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_2e7xc"]
 size = Vector3(11.5, 1, 12.55)
+
+[sub_resource type="Curve3D" id="Curve3D_mqwyx"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 7.94807, 24.9085, 21.3239, 3.4875, -0.668735, 8.28906, -3.4875, 0.668735, -8.28906, -6.04267, 0.589896, -16.0247, -5.44701, -13.1599, 14.9515, 5.44701, 13.1599, -14.9515, 0.0266857, 10.6057, -51.4439),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_hmcut"]
 ground_color = Color(0.904425, 0.0355843, 0.663481, 1)
@@ -41,10 +61,11 @@ sky_material = SubResource("PhysicalSkyMaterial_hmcut")
 [sub_resource type="Environment" id="Environment_2e7xc"]
 background_mode = 2
 sky = SubResource("Sky_s15bv")
+tonemap_mode = 3
 glow_enabled = true
+glow_strength = 1.02
 glow_bloom = 0.28
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.0045
+volumetric_fog_density = 0.01
 
 [node name="TeamTable" type="Node3D"]
 
@@ -53,6 +74,11 @@ transform = Transform3D(1, 0, 0, 0, 0.957536, -0.288313, 0, 0.288313, 0.957536, 
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Table"]
 shape = SubResource("WorldBoundaryShape3D_4qb4o")
+
+[node name="Floor" type="MeshInstance3D" parent="Table/CollisionShape3D"]
+visible = false
+mesh = SubResource("PlaneMesh_bbmw3")
+skeleton = NodePath("../..")
 
 [node name="DestroyZone" type="Area3D" parent="Table"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.46268, 2.81607)
@@ -67,9 +93,10 @@ shape = SubResource("WorldBoundaryShape3D_e1kdr")
 transform = Transform3D(1, 0, 0, 0, 0.539756, 0.841822, 0, -0.841822, 0.539756, 0, 8.23541, 10.5717)
 
 [node name="Flipper" type="Node3D" parent="Table"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.9449, 0.553003, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.71319, 1.11548, 0.398462)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Table/Flipper"]
+visible = false
 collision_layer = 0
 collision_mask = 0
 
@@ -78,73 +105,86 @@ shape = SubResource("BoxShape3D_bbmw3")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="Table/Flipper"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0995655, 0, 0)
-mass = 2.0
-gravity_scale = 7.0
+mass = 0.8
+physics_material_override = SubResource("PhysicsMaterial_hmcut")
+gravity_scale = 5.0
 center_of_mass_mode = 1
+center_of_mass = Vector3(-3, 0, 0)
+inertia = Vector3(5, 0, 5)
 can_sleep = false
 freeze_mode = 1
 continuous_cd = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Table/Flipper/RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55831, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.998601, -0.0528761, 0, 0.0528761, 0.998601, -1.55831, 0.287385, -0.110976)
 mesh = SubResource("BoxMesh_e1kdr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Table/Flipper/RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.56589, 2.98023e-08, 0.588867)
+transform = Transform3D(-4.37114e-08, -1, 4.42037e-16, 0.998601, -4.36503e-08, -0.0528761, 0.0528761, -2.31128e-09, 0.998601, -1.54513, 0.276365, 0.0971508)
 shape = SubResource("BoxShape3D_hmcut")
 
 [node name="HingeJoint3D" type="HingeJoint3D" parent="Table/Flipper"]
-transform = Transform3D(0.720866, -0.693075, 0, -3.02953e-08, -3.151e-08, 1, -0.693075, -0.720866, -4.37114e-08, -0.398565, -2.25728e-07, 0.0772533)
+transform = Transform3D(0.720866, -0.693075, 0, -2.98023e-08, -2.98023e-08, 1, -0.693075, -0.720866, -2.98023e-08, -4.76837e-07, -0.719357, -0.502955)
 node_a = NodePath("../RigidBody3D")
 node_b = NodePath("../StaticBody3D")
+params/bias = 0.99
 angular_limit/enable = true
 angular_limit/upper = 0.349066
 angular_limit/lower = -0.698132
-motor/target_velocity = 17.8722
+angular_limit/bias = 0.99
 motor/max_impulse = 1024.0
 script = ExtResource("2_e1kdr")
 action = "flip_right"
 
+[node name="Audio" type="AudioStreamPlayer3D" parent="Table/Flipper/HingeJoint3D"]
+stream = SubResource("AudioStreamRandomizer_vs50b")
+
 [node name="Flipper2" type="Node3D" parent="Table"]
-transform = Transform3D(-1, 0, 8.74228e-08, -7.64274e-15, -1, -8.74228e-08, 8.74228e-08, -8.74228e-08, 1, -4.43219, 0.553003, 0.0329459)
+transform = Transform3D(-1, 8.74228e-08, 0, -8.74228e-08, -1, 0, 0, 0, 1, -4.24844, 1.21338, 0.428)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Table/Flipper2"]
 collision_layer = 0
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Table/Flipper2/StaticBody3D"]
+visible = false
 shape = SubResource("BoxShape3D_bbmw3")
 
 [node name="RigidBody3D" type="RigidBody3D" parent="Table/Flipper2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0282936, 1.77636e-15, -3.55271e-15)
-mass = 2.0
-gravity_scale = 7.0
+mass = 0.8
+physics_material_override = SubResource("PhysicsMaterial_hmcut")
+gravity_scale = 5.0
 center_of_mass_mode = 1
+center_of_mass = Vector3(3, 0, 0)
+inertia = Vector3(5, 0, 5)
 can_sleep = false
 freeze_mode = 1
 continuous_cd = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Table/Flipper2/RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.74061, 0, 0)
+transform = Transform3D(1, 7.50559e-09, 1.27075e-08, -8.31019e-09, 0.997914, 0.0645498, -1.21966e-08, -0.0645497, 0.997914, -1.74061, -0.260489, -0.0495507)
 mesh = SubResource("BoxMesh_e1kdr")
 
-[node name="CollisionShape3D2" type="CollisionShape3D" parent="Table/Flipper2/RigidBody3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.73464, -1.0035e-07, 0.594865)
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Table/Flipper2/RigidBody3D"]
+transform = Transform3D(-5.1217e-08, 1, 1.27075e-08, -0.997914, -5.19304e-08, 0.0645498, 0.0645497, -9.375e-09, 0.997914, -1.74061, -0.244695, 0.194626)
 shape = SubResource("BoxShape3D_hmcut")
 
 [node name="HingeJoint3D" type="HingeJoint3D" parent="Table/Flipper2"]
-transform = Transform3D(0.720866, -0.693075, 0, -3.02953e-08, -3.151e-08, 1, -0.693075, -0.720866, -4.37114e-08, -0.398565, -2.25728e-07, 0.0772533)
+transform = Transform3D(0.720866, -0.693075, 1.77636e-15, -1.19209e-07, -8.9407e-08, 1, -0.693075, -0.720866, -2.08616e-07, 4.76837e-07, 0.719357, -0.502955)
 node_a = NodePath("../RigidBody3D")
 node_b = NodePath("../StaticBody3D")
+params/bias = 0.99
 angular_limit/enable = true
 angular_limit/upper = 0.349066
 angular_limit/lower = -0.698132
-motor/target_velocity = 17.8722
+angular_limit/bias = 0.99
 motor/max_impulse = 1024.0
 script = ExtResource("2_e1kdr")
+action = null
 
-[node name="Floor" type="MeshInstance3D" parent="Table"]
-mesh = SubResource("PlaneMesh_bbmw3")
+[node name="Audio" type="AudioStreamPlayer3D" parent="Table/Flipper2/HingeJoint3D"]
+stream = SubResource("AudioStreamRandomizer_vs50b")
 
 [node name="Ball" parent="Table" instance=ExtResource("3_2r7ie")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.58302, 1.8285, -9.34177)
@@ -170,28 +210,30 @@ material_override = ExtResource("4_2e7xc")
 use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Table/TablePrototype"]
-size = Vector3(41.955, 7, 120)
+size = Vector3(52.455, 8.805, 142.795)
 
 [node name="CSGPolygon3D" type="CSGPolygon3D" parent="Table/TablePrototype/CSGBox3D"]
 transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 0, 5.78261, 8.93954)
 operation = 2
 polygon = PackedVector2Array(7.07222, 39.3845, -5.37096, 39.4804, -7.64834, 26.6181, -11.0343, 19.725, -8.04036, 13.3436, -11.9405, 9.48908, -6.4609, -2.80809, 2.20363, -4.33054, 10.7445, -4.38313, 13.3111, 3.5135, 12.8684, 9.64458, 11.7695, 12.2441, 6.28545, 15.5067, 17.3282, 21.6463, 15.3923, 34.7287)
-depth = 8.2
+depth = 5.6
 
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="Table/TablePrototype/CSGBox3D/CSGPolygon3D"]
-transform = Transform3D(1, 0, 0, 0, 1.19209e-07, -1, 0, 1, 1.19209e-07, -6.84751, 9.22626, -3.3926)
+transform = Transform3D(0.946717, -0.0928562, -0.308391, -0.308391, 0.01471, -0.951146, 0.0928562, 0.995571, -0.0147098, -6.84751, 9.22626, -3.3926)
 operation = 2
 radius = 2.29834
 height = 20.655
+sides = 13
 
 [node name="CSGCylinder3D2" type="CSGCylinder3D" parent="Table/TablePrototype/CSGBox3D/CSGPolygon3D"]
 transform = Transform3D(0.978238, 0, -0.207485, -0.207485, 2.68221e-07, -0.978238, 5.56518e-08, 1, 2.62384e-07, 7.46017, 9.22626, -3.3926)
 operation = 2
 radius = 2.3335
 height = 20.655
+sides = 12
 
 [node name="CSGCylinder3D3" type="CSGCylinder3D" parent="Table/TablePrototype/CSGBox3D/CSGPolygon3D"]
-transform = Transform3D(1, 0, 0, 0, -2.98023e-08, -1, 0, 1, -2.98023e-08, 0, 25.4452, -1.44361)
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, -1, 0, 1, -2.98023e-08, 0, 25.4452, -2.87084)
 radius = 14.4956
 height = 4.88721
 sides = 64
@@ -220,26 +262,82 @@ transform = Transform3D(0.271133, -0.50042, 0.822233, 0.557039, 0.778226, 0.2899
 size = Vector3(3.42554, 8.26746, 3.47162)
 
 [node name="Canyon" type="CSGPolygon3D" parent="Table/TablePrototype/CSGBox3D"]
-transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 8.6197, 5.95132, -7.02061)
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 1, 0, -1, -2.98023e-08, 8.6197, 5.70911, -7.02061)
 operation = 2
-polygon = PackedVector2Array(-0.735486, -3.80259, -3.00487, -1.39479, 1.517, -0.871103, 2.51957, 0.245991, 2.60905, 1.55605, 2.50631, 2.14637, 1.89655, 2.77881, 3.35041, 3.21265, 5.76896, 3.44779, 5.59114, 2.31327, 5.49307, 0.440958, 2.99474, -2.08026, 1.47841, -2.63144, 0.0618505, -3.51813)
-depth = 11.87
+polygon = PackedVector2Array(-0.735486, -3.80259, -2.24626, -2.2176, -0.999733, -0.252306, 0.969528, -0.0683179, 2.2201, 0.668866, 2.60905, 1.55605, 2.50631, 2.14637, 1.89655, 2.77881, 3.35041, 3.21265, 5.76896, 3.44779, 5.59114, 2.31327, 5.49307, 0.440958, 2.99474, -2.08026, 1.47841, -2.63144, 0.0618505, -3.51813)
+depth = 5.5
 
 [node name="CSGSphere3D" type="CSGSphere3D" parent="Table/TablePrototype/CSGBox3D"]
 transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 0.577609, 0, -1, -1.49012e-08, -6.25705, 1.97446, -20.1538)
 operation = 2
 radius = 3.98994
-radial_segments = 100
-rings = 66
+radial_segments = 10
+rings = 10
+
+[node name="CSGSphere3D2" type="CSGSphere3D" parent="Table/TablePrototype/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 0.577609, 0, -1, -1.49012e-08, 5.29882, 3.19922, -46.6802)
+operation = 2
+radius = 3.98994
+radial_segments = 10
+rings = 10
+
+[node name="CSGSphere3D3" type="CSGSphere3D" parent="Table/TablePrototype/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 0.577609, 0, -1, -1.49012e-08, -10.021, 2.51081, -38.8078)
+operation = 2
+radius = 3.98994
+radial_segments = 10
+rings = 10
+
+[node name="CSGSphere3D5" type="CSGSphere3D" parent="Table/TablePrototype/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 0.577609, 0, -1, -1.49012e-08, -10.8459, 1.9138, -48.8396)
+operation = 2
+radius = 3.33135
+radial_segments = 10
+rings = 10
+
+[node name="CSGSphere3D6" type="CSGSphere3D" parent="Table/TablePrototype/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 0.577609, 0, -1, -1.49012e-08, -10.8459, 3.32749, -48.8396)
+operation = 2
+radius = 3.33135
+radial_segments = 10
+rings = 10
+
+[node name="CSGSphere3D4" type="CSGSphere3D" parent="Table/TablePrototype/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, -2.98023e-08, 0.577609, 0, -1, -1.49012e-08, 3.9183, 1.92659, -40.4627)
+operation = 2
+radius = 5.10361
+radial_segments = 10
+rings = 10
+
+[node name="CSGPolygon3D2" type="CSGPolygon3D" parent="Table/TablePrototype/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 0.995366, -0.0961585, 0, 0.0961585, 0.995366, -6.67956, -8.8276, -20.5251)
+operation = 2
+polygon = PackedVector2Array(3.47986, -0.76963, 1.17274, 1.69417, -0.711532, -0.666984, -2.13399, 1.39668, -2.51836, 4.06488, -1.07574, 5.2404, 1.10352, 4.29426, 4.7172, 3.45763, 4.07593, 1.77615)
+mode = 2
+path_node = NodePath("Path3D")
+path_interval_type = 1
+path_interval = 0.2
+path_simplify_angle = 0.0
+path_rotation = 1
+path_rotation_accurate = false
+path_local = false
+path_continuous_u = true
+path_u_distance = 1.0
+path_joined = false
+
+[node name="Path3D" type="Path3D" parent="Table/TablePrototype/CSGBox3D/CSGPolygon3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.39324, 0, 0)
+curve = SubResource("Curve3D_mqwyx")
 
 [node name="Spawner" type="Node3D" parent="Table"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.67582, 5.35037, -38.7502)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.1644, 4.87631, -62.0858)
 script = ExtResource("4_0itwy")
 scene = Array[PackedScene]([ExtResource("3_2r7ie")])
 nudge = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.760894, 0.648877, 0, -0.648877, 0.760894, 0, 18.5515, 8.25459)
+transform = Transform3D(1, 0, 0, 0, 0.798888, 0.60148, 0, -0.60148, 0.798888, -9.53674e-07, 31.0137, 12.8954)
+doppler_tracking = 2
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Camera3D"]
 spot_range = 4096.71
@@ -251,5 +349,8 @@ shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Camera3D"]
 environment = SubResource("Environment_2e7xc")
+
+[node name="AudioListener3D" type="AudioListener3D" parent="Camera3D"]
+current = true
 
 [connection signal="destroyed" from="Table/DestroyZone" to="Table/Spawner" method="spawn"]

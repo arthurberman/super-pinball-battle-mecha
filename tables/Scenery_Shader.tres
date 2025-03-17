@@ -22,5 +22,4 @@ albedo_texture = SubResource("GradientTexture2D_a3shx")
 metallic = 1.0
 metallic_texture = SubResource("GradientTexture2D_a3shx")
 roughness = 0.4
-normal_enabled = true
 normal_texture = SubResource("NoiseTexture2D_vu4f6")
