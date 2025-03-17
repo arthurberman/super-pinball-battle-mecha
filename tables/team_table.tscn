@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://dlfnadrtvlul8"]
+[gd_scene load_steps=21 format=3 uid="uid://dlfnadrtvlul8"]
 
 [ext_resource type="Script" uid="uid://bkkh7vw7oodqh" path="res://tables/destroy_zone.gd" id="1_bbmw3"]
 [ext_resource type="Script" uid="uid://dxg4ufrx2gk0m" path="res://tables/flipper.gd" id="2_e1kdr"]
@@ -8,14 +8,6 @@
 [ext_resource type="AudioStream" uid="uid://cl6cd31rfpdyx" path="res://sounds/flips/flip-008.wav" id="4_mqwyx"]
 [ext_resource type="AudioStream" uid="uid://dc6iipcrm0yhl" path="res://sounds/flips/flip-010.wav" id="5_dyg4x"]
 [ext_resource type="Script" uid="uid://ugle8uj48cxi" path="res://tables/slow_down.gd" id="5_hmcut"]
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_4qb4o"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_bbmw3"]
-material = ExtResource("4_2e7xc")
-size = Vector2(40, 60)
-subdivide_width = 4
-subdivide_depth = 4
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_e1kdr"]
 
@@ -71,14 +63,6 @@ volumetric_fog_density = 0.01
 
 [node name="Table" type="AnimatableBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.957536, -0.288313, 0, 0.288313, 0.957536, 0, -0.66849, 0)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Table"]
-shape = SubResource("WorldBoundaryShape3D_4qb4o")
-
-[node name="Floor" type="MeshInstance3D" parent="Table/CollisionShape3D"]
-visible = false
-mesh = SubResource("PlaneMesh_bbmw3")
-skeleton = NodePath("../..")
 
 [node name="DestroyZone" type="Area3D" parent="Table"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.46268, 2.81607)
@@ -181,7 +165,6 @@ angular_limit/lower = -0.698132
 angular_limit/bias = 0.99
 motor/max_impulse = 1024.0
 script = ExtResource("2_e1kdr")
-action = null
 
 [node name="Audio" type="AudioStreamPlayer3D" parent="Table/Flipper2/HingeJoint3D"]
 stream = SubResource("AudioStreamRandomizer_vs50b")

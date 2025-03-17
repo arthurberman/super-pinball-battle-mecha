@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cy7vhlvb03ymx"]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Table" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(89, 623, 493, 626, 505, 87, 81, 87)
+
+[node name="UI" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(746, 148, 1012, 149, 1014, 298, 745, 301)
